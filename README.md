@@ -1,7 +1,10 @@
 # Understanding Node.js and npm
 
-This is a demo project to help Jason understand how the heck this Node.js stuff works. 
+This is a demo project to help Jason understand how Node.js and npm work.
 
-I want to see a basic project and figure out my standard development enviorment. 
+The project includes a basic web page/app with an interactive timer game, where the goal is to tap the timer button consistently.
 
-As a starting point, I can try making a web page/app that has some sort of interactive timer. Maybe with a game aspect, like can you tap the timer button several times consistantly. 
+## Installation
+
+To run this project, you will need Node.js and npm installed on your computer. After installing Node.js, you can set up the project by running:
+

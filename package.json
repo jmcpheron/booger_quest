@@ -1,0 +1,14 @@
+{
+  "name": "nodejs-timer-game",
+  "version": "1.0.0",
+  "description": "A simple Node.js project to understand Node.js and npm with an interactive timer game.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Jason",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
