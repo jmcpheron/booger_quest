@@ -25,3 +25,10 @@ body {
 #timerHistory, #challengeResults {
     color: #000080; /* Navy */
 }
+
+#startGhostGame, #bustGhost {
+    margin: 10px;
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 8px;
+}
