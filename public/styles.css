@@ -1,1 +1,27 @@
-#timerButton, #challengeButton {\n    background-color: #32cd32; /* Lime green */\n    color: #ff6347; /* Tomato */\n    border: 2px solid #9400d3; /* Dark violet */\n    padding: 10px 20px;\n    text-align: center;\n    text-decoration: none;\n    display: inline-block;\n    font-size: 16px;\n    margin: 10px;\n    cursor: pointer;\n    border-radius: 8px;\n}\n#timerHistory, #challengeResults {\n    margin-top: 20px;\n    color: #000080; /* Navy */\n}
+body {
+    font-family: 'Papyrus', sans-serif;
+    background-color: #ffccf9; /* Light pink */
+    color: #006400; /* Dark green */
+    text-align: center;
+    padding: 20px;
+}
+
+.main-content {
+    margin: auto;
+    width: 500px;
+    padding: 20px;
+    border: 2px dashed #ff4500; /* Orange red */
+    border-radius: 10px;
+    background-color: #ffffe0; /* Light yellow */
+}
+
+.btn {
+    font-size: 16px;
+    border-radius: 8px;
+    padding: 10px 20px;
+    margin: 10px;
+}
+
+#timerHistory, #challengeResults {
+    color: #000080; /* Navy */
+}
