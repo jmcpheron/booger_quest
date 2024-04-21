@@ -33,8 +33,22 @@ document.getElementById('bustGhost').addEventListener('click', function() {
     historyList.appendChild(newTime);
 }
 
-function recordChallengeTime(time) {
+function recordTime(time) {
+    const historyList = document.getElementById('historyList');
     const newTime = document.createElement('li');
-    newTime.textContent = `Attempt: ${time} ms - ${Math.abs(2000 - time)} ms off`;
-    resultsList.appendChild(newTime);
+    newTime.textContent = `Time: ${time} ms`;
+    historyList.appendChild(newTime);
 }
+
+document.getElementById('timerButton').addEventListener('click', function() {
+    if (!timerRunning) {
+        startTime = Date.now();
+        timerRunning = true;
+        this.textContent = 'Stop Timer';
+    } else {
+        elapsedTime = Date.now() - startTime;
+        timerRunning = false;
+        this.textContent = 'Start Timer';
+        recordTime(elapsedTime);
+    }
+});
