@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-timer-game",
+  "name": "zany-timer-extravaganza",
   "version": "1.0.0",
-  "description": "A simple Node.js project to understand Node.js and npm with an interactive timer game.",
+  "description": "A zany Node.js project with an interactive timer game featuring a fun and colorful design.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
