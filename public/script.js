@@ -27,6 +27,8 @@ document.getElementById('bustGhost').addEventListener('click', function() {
     ghostGameRunning = false;
     document.getElementById('bustGhost').style.display = 'none';
 });
+
+function jjm(){
     timerHistory.push(time);
     const newTime = document.createElement('li');
     newTime.textContent = `Time: ${time} ms`;
