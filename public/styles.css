@@ -4,7 +4,16 @@ body {
     color: #006400; /* Dark green */
     text-align: center;
     padding: 20px;
-.bkd {\n    font-size: 32px;\n    font-weight: bold;\n}\n\n.bkd:nth-child(1) { color: red; }    /* B */\n.bkd:nth-child(2) { color: green; }  /* K */\n.bkd:nth-child(3) { color: blue; }   /* D */\n
+    }
+
+.bkd {
+    font-size: 32px;
+    font-weight: bold;
+    }
+
+.bkd:nth-child(1) { color: red; }    /* B */
+.bkd:nth-child(2) { color: green; }  /* K */
+.bkd:nth-child(3) { color: blue; }   /* D */
 
 .main-content {
     margin: auto;
