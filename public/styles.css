@@ -4,7 +4,7 @@ body {
     color: #006400; /* Dark green */
     text-align: center;
     padding: 20px;
-}
+.bkd {\n    font-size: 32px;\n    font-weight: bold;\n}\n\n.bkd:nth-child(1) { color: red; }    /* B */\n.bkd:nth-child(2) { color: green; }  /* K */\n.bkd:nth-child(3) { color: blue; }   /* D */\n
 
 .main-content {
     margin: auto;
