@@ -1,0 +1,32 @@
+# JJM 2024-04-23 Thanks ChatGPT. I don't know node yet
+# Dependency directory
+node_modules/
+
+# NPM lock file
+package-lock.json
+
+# Environment variables
+.env
+
+# macOS system files
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Directory for output files (if not needed in version control)
+dist/
+
+# Coverage directory used by tools like Istanbul
+coverage/
+
+# Public assets or build files if they are generated (uncomment if applicable)
+# public/
+
+# Temporary files
+tmp/
+temp/
+
+# Plandex history
+.plandex/
