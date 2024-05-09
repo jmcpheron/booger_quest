@@ -51,3 +51,21 @@ body {
     padding: 10px 20px;
     border-radius: 8px;
 }
+#timerHistory, #challengeResults {
+    color: #000080; /* Navy */
+}
+
+.btn-option {
+    margin: 5px;
+    font-size: 18px;
+    padding: 10px 20px;
+    color: white;
+    background-color: #007bff; /* Bootstrap primary blue */
+    border: none;
+    border-radius: 5px;
+}
+
+#colorResults {
+    margin-top: 20px;
+    font-size: 20px;
+}
