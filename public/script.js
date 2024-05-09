@@ -112,5 +112,39 @@ function checkColorMatch(selectedColor) {
     setTimeout(setupColorClashGame, 2000);
 }
 
-document.addEventListener('DOMContentLoaded', setupColorClashGame);
+document.addEventListener('DOMContentLoaded', function() {
+    setupColorClashGame();
+});
 
+function setupColorClashGame() {
+    const colorWordElement = document.getElementById('colorWord');
+    const options = document.querySelectorAll('.btn-option');
+    currentColorWord = colors[Math.floor(Math.random() * colors.length)];
+    currentTextColor = colors[Math.floor(Math.random() * colors.length)];
+
+    colorWordElement.textContent = currentColorWord;
+    colorWordElement.style.color = currentTextColor;
+
+    let optionsArray = shuffleColors(colors, currentTextColor);
+    options.forEach((button, index) => {
+        button.textContent = optionsArray[index];
+        button.onclick = () => checkColorMatch(optionsArray[index]);
+    });
+}
+
+function shuffleColors(colors, exclude) {
+    let shuffled = colors.filter(color => color !== exclude);
+    shuffled = shuffled.sort(() => 0.5 - Math.random());
+    shuffled.splice(Math.floor(Math.random() * shuffled.length), 0, exclude);
+    return shuffled;
+}
+
+function checkColorMatch(selectedColor) {
+    const resultsElement = document.getElementById('colorResults');
+    if (selectedColor === currentTextColor) {
+        resultsElement.textContent = 'Correct! 🎉';
+    } else {
+        resultsElement.textContent = 'Oops! Try again. 🙃';
+    }
+    setTimeout(setupColorClashGame, 2000);
+}
