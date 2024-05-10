@@ -148,3 +148,7 @@ function checkColorMatch(selectedColor) {
     }
     setTimeout(setupColorClashGame, 2000);
 }
+document.getElementById('themeToggle').addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+});
+

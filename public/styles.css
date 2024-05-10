@@ -4,7 +4,46 @@ body {
     color: #006400; /* Dark green */
     text-align: center;
     padding: 20px;
-    }
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #333; /* Dark grey */
+    color: #ccc; /* Light grey */
+}
+
+.bkd, .ajm {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.bkd:nth-child(1), .ajm:nth-child(1) { color: red; }
+.bkd:nth-child(2), .ajm:nth-child(2) { color: green; }
+.bkd:nth-child(3), .ajm:nth-child(3) { color: blue; }
+.ajm:nth-child(4) { color: blue; }
+
+.btn {
+    font-size: 16px;
+    border-radius: 8px;
+    padding: 10px 20px;
+    margin: 10px;
+}
+
+.btn-option {
+    margin: 5px;
+    font-size: 18px;
+    padding: 10px 20px;
+    color: white;
+    background-color: #007bff; /* Bootstrap primary blue */
+    border: none;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+#colorResults, #timerHistory, #challengeResults {
+    margin-top: 20px;
+    font-size: 20px;
+}
 
 .bkd {
     font-size: 32px;
@@ -70,4 +109,5 @@ body {
     margin-top: 20px;
     font-size: 20px;
 }
+
 
