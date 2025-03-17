@@ -88,7 +88,7 @@
         }
         
         .flagged::before {
-            content: "ðŸš©";
+            content: "🚩";
             font-size: 1.2rem;
         }
         
@@ -234,7 +234,7 @@
         
         <div class="stats">
             <div>Time: <span id="time">0</span>s</div>
-            <div>ðŸ€: <span id="shamrocks-left">0</span></div>
+            <div>🍀: <span id="shamrocks-left">0</span></div>
         </div>
         
         <div id="difficulty-select">
@@ -252,20 +252,20 @@
         </div>
         
         <div class="legend">
-            <div class="legend-item">ðŸ€ - Shamrock</div>
-            <div class="legend-item">ðŸŒˆ - Rainbow</div>
-            <div class="legend-item">ðŸ¯ - Pot of Gold</div>
-            <div class="legend-item">ðŸ”¥ - St. Brigid's Flame</div>
-            <div class="legend-item">ðŸŒ¿ - Brigid's Cross</div>
-            <div class="legend-item">ðŸ§™â€â™‚ï¸ - Leprechaun (Avoid!)</div>
-            <div class="legend-item">ðŸŒ‰ - Bridge</div>
+            <div class="legend-item">🍀 - Shamrock</div>
+            <div class="legend-item">🌈 - Rainbow</div>
+            <div class="legend-item">🍯 - Pot of Gold</div>
+            <div class="legend-item">🔥 - St. Brigid's Flame</div>
+            <div class="legend-item">🌿 - Brigid's Cross</div>
+            <div class="legend-item">🧙‍♂️ - Leprechaun (Avoid!)</div>
+            <div class="legend-item">🌉 - Bridge</div>
         </div>
     </div>
     
     <div id="win-modal" class="modal">
         <div class="modal-content">
-            <h2>SlÃ¡inte! You Won!</h2>
-            <span class="emoji-large">ðŸ€ðŸŒˆðŸ¯</span>
+            <h2>Sláinte! You Won!</h2>
+            <span class="emoji-large">🍀🌈🍯</span>
             <p>You found all the lucky charms!</p>
             <p>Time: <span id="win-time"></span> seconds</p>
             <button id="play-again-win">Play Again</button>
@@ -275,7 +275,7 @@
     <div id="lose-modal" class="modal">
         <div class="modal-content">
             <h2>Caught by a Leprechaun!</h2>
-            <span class="emoji-large">ðŸ§™â€â™‚ï¸</span>
+            <span class="emoji-large">🧙‍♂️</span>
             <p>Oh no! You disturbed a mischievous leprechaun!</p>
             <button id="play-again-lose">Try Again</button>
         </div>
@@ -294,13 +294,13 @@
                 <li>Find all the charms without disturbing any leprechauns to win!</li>
             </ul>
             <p><strong>Special Items:</strong></p>
-            <p>ðŸ€ Shamrock - Good luck<br>
-            ðŸŒˆ Rainbow - Leads to treasure<br>
-            ðŸ¯ Pot of Gold - Valuable find<br>
-            ðŸ”¥ St. Brigid's Flame - Sacred fire<br>
-            ðŸŒ¿ Brigid's Cross - Protection<br>
-            ðŸŒ‰ Bridge - Named after St. Brigid<br>
-            ðŸ§™â€â™‚ï¸ Leprechaun - Avoid these!</p>
+            <p>🍀 Shamrock - Good luck<br>
+            🌈 Rainbow - Leads to treasure<br>
+            🍯 Pot of Gold - Valuable find<br>
+            🔥 St. Brigid's Flame - Sacred fire<br>
+            🌿 Brigid's Cross - Protection<br>
+            🌉 Bridge - Named after St. Brigid<br>
+            🧙‍♂️ Leprechaun - Avoid these!</p>
             <button id="close-help">Got it!</button>
             <button id="start-tutorial">Show Tutorial</button>
         </div>
@@ -325,12 +325,12 @@
         
         // Define special items (these replace regular numbers on the board)
         const specialItems = [
-            { emoji: 'ðŸ€', chance: 0.4 },   // Shamrock
-            { emoji: 'ðŸŒˆ', chance: 0.2 },   // Rainbow
-            { emoji: 'ðŸ¯', chance: 0.1 },   // Pot of Gold
-            { emoji: 'ðŸ”¥', chance: 0.1 },   // St. Brigid's Flame
-            { emoji: 'ðŸŒ¿', chance: 0.1 },   // Brigid's Cross
-            { emoji: 'ðŸŒ‰', chance: 0.1 }    // Bridge
+            { emoji: '🍀', chance: 0.4 },   // Shamrock
+            { emoji: '🌈', chance: 0.2 },   // Rainbow
+            { emoji: '🍯', chance: 0.1 },   // Pot of Gold
+            { emoji: '🔥', chance: 0.1 },   // St. Brigid's Flame
+            { emoji: '🌿', chance: 0.1 },   // Brigid's Cross
+            { emoji: '🌉', chance: 0.1 }    // Bridge
         ];
         
         // DOM elements
@@ -572,7 +572,7 @@
             
             // Show content
             if (cell.isLeprechaun) {
-                domCell.textContent = 'ðŸ§™â€â™‚ï¸';
+                domCell.textContent = '🧙‍♂️';
             } else if (cell.specialItem) {
                 domCell.textContent = cell.specialItem;
             } else if (cell.neighborCount > 0) {
@@ -626,7 +626,7 @@
                     domCell.classList.add('revealed');
                     
                     if (cell.isLeprechaun) {
-                        domCell.textContent = 'ðŸ§™â€â™‚ï¸';
+                        domCell.textContent = '🧙‍♂️';
                     } else if (cell.specialItem) {
                         domCell.textContent = cell.specialItem;
                     } else if (cell.neighborCount > 0) {
