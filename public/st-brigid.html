@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Brigid's Lucky Charm Hunt</title>
+    <style>
+        body {
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #e0f7e0, #ffffff);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            overflow: hidden;
+            user-select: none;
+        }
+        
+        .container {
+            width: 95%;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #007f4f;
+            margin-bottom: 5px;
+            font-size: 1.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        h2 {
+            color: #cd853f;
+            margin-top: 0;
+            font-size: 1.3rem;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 4px;
+            margin: 0 auto;
+            background-color: #007f4f;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .cell {
+            background-color: #b0e0b0;
+            aspect-ratio: 1/1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .cell:active {
+            transform: scale(0.95);
+        }
+        
+        .revealed {
+            background-color: #f0f8ff;
+        }
+        
+        .flagged::before {
+            content: "ðŸš©";
+            font-size: 1.2rem;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            width: 100%;
+        }
+        
+        button {
+            background-color: #007f4f;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+        
+        button:active {
+            transform: scale(0.95);
+        }
+        
+        .flag-mode {
+            background-color: #cd853f;
+        }
+        
+        #difficulty-select {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .difficulty-btn {
+            flex: 1;
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .active-difficulty {
+            background-color: #cd853f;
+            font-weight: bold;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 80%;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from {transform: scale(0.8); opacity: 0;}
+            to {transform: scale(1); opacity: 1;}
+        }
+        
+        .modal h2 {
+            color: #007f4f;
+            margin-top: 0;
+        }
+        
+        .modal p {
+            margin-bottom: 20px;
+        }
+        
+        .emoji-large {
+            font-size: 3rem;
+            margin: 10px 0;
+            display: block;
+        }
+        
+        .legend {
+            margin-top: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Tutorial styles */
+        .tutorial-step {
+            position: absolute;
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 250px;
+            z-index: 50;
+            animation: tutorialPulse 2s infinite;
+        }
+        
+        @keyframes tutorialPulse {
+            0% {box-shadow: 0 5px 15px rgba(0, 127, 79, 0.3);}
+            50% {box-shadow: 0 5px 20px rgba(0, 127, 79, 0.8);}
+            100% {box-shadow: 0 5px 15px rgba(0, 127, 79, 0.3);}
+        }
+        
+        #tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Brigid's Lucky Charm Hunt</h1>
+        <h2>Find the treasures, avoid the leprechauns!</h2>
+        
+        <div class="stats">
+            <div>Time: <span id="time">0</span>s</div>
+            <div>ðŸ€: <span id="shamrocks-left">0</span></div>
+        </div>
+        
+        <div id="difficulty-select">
+            <button class="difficulty-btn active-difficulty" data-difficulty="easy">Easy</button>
+            <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+            <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+        </div>
+        
+        <div class="game-board" id="game-board"></div>
+        
+        <div class="controls">
+            <button id="new-game-btn">New Game</button>
+            <button id="flag-btn">Flag Mode: OFF</button>
+            <button id="help-btn">Help</button>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item">ðŸ€ - Shamrock</div>
+            <div class="legend-item">ðŸŒˆ - Rainbow</div>
+            <div class="legend-item">ðŸ¯ - Pot of Gold</div>
+            <div class="legend-item">ðŸ”¥ - St. Brigid's Flame</div>
+            <div class="legend-item">ðŸŒ¿ - Brigid's Cross</div>
+            <div class="legend-item">ðŸ§™â€â™‚ï¸ - Leprechaun (Avoid!)</div>
+            <div class="legend-item">ðŸŒ‰ - Bridge</div>
+        </div>
+    </div>
+    
+    <div id="win-modal" class="modal">
+        <div class="modal-content">
+            <h2>SlÃ¡inte! You Won!</h2>
+            <span class="emoji-large">ðŸ€ðŸŒˆðŸ¯</span>
+            <p>You found all the lucky charms!</p>
+            <p>Time: <span id="win-time"></span> seconds</p>
+            <button id="play-again-win">Play Again</button>
+        </div>
+    </div>
+    
+    <div id="lose-modal" class="modal">
+        <div class="modal-content">
+            <h2>Caught by a Leprechaun!</h2>
+            <span class="emoji-large">ðŸ§™â€â™‚ï¸</span>
+            <p>Oh no! You disturbed a mischievous leprechaun!</p>
+            <button id="play-again-lose">Try Again</button>
+        </div>
+    </div>
+    
+    <div id="help-modal" class="modal">
+        <div class="modal-content">
+            <h2>How to Play</h2>
+            <p>Welcome to Brigid's Lucky Charm Hunt! This is a St. Patrick's Day themed puzzle game.</p>
+            <p><strong>Goal:</strong> Find all the lucky charms while avoiding the mischievous leprechauns.</p>
+            <p><strong>How to play:</strong></p>
+            <ul style="text-align: left;">
+                <li>Tap a square to reveal what's underneath</li>
+                <li>Numbers indicate how many leprechauns are in adjacent squares</li>
+                <li>Use the Flag button to mark suspected leprechaun locations</li>
+                <li>Find all the charms without disturbing any leprechauns to win!</li>
+            </ul>
+            <p><strong>Special Items:</strong></p>
+            <p>ðŸ€ Shamrock - Good luck<br>
+            ðŸŒˆ Rainbow - Leads to treasure<br>
+            ðŸ¯ Pot of Gold - Valuable find<br>
+            ðŸ”¥ St. Brigid's Flame - Sacred fire<br>
+            ðŸŒ¿ Brigid's Cross - Protection<br>
+            ðŸŒ‰ Bridge - Named after St. Brigid<br>
+            ðŸ§™â€â™‚ï¸ Leprechaun - Avoid these!</p>
+            <button id="close-help">Got it!</button>
+            <button id="start-tutorial">Show Tutorial</button>
+        </div>
+    </div>
+    
+    <div id="tutorial-overlay"></div>
+    
+    <script>
+        // Game variables
+        let board = [];
+        let width = 8;
+        let height = 8;
+        let leprechaunCount = 10;
+        let gameStarted = false;
+        let gameOver = false;
+        let flagMode = false;
+        let startTime = 0;
+        let timerInterval;
+        let revealedCount = 0;
+        let difficulty = 'easy';
+        let tutorialStep = 0;
+        
+        // Define special items (these replace regular numbers on the board)
+        const specialItems = [
+            { emoji: 'ðŸ€', chance: 0.4 },   // Shamrock
+            { emoji: 'ðŸŒˆ', chance: 0.2 },   // Rainbow
+            { emoji: 'ðŸ¯', chance: 0.1 },   // Pot of Gold
+            { emoji: 'ðŸ”¥', chance: 0.1 },   // St. Brigid's Flame
+            { emoji: 'ðŸŒ¿', chance: 0.1 },   // Brigid's Cross
+            { emoji: 'ðŸŒ‰', chance: 0.1 }    // Bridge
+        ];
+        
+        // DOM elements
+        const gameBoard = document.getElementById('game-board');
+        const timeDisplay = document.getElementById('time');
+        const shamrocksDisplay = document.getElementById('shamrocks-left');
+        const newGameBtn = document.getElementById('new-game-btn');
+        const flagBtn = document.getElementById('flag-btn');
+        const helpBtn = document.getElementById('help-btn');
+        const winModal = document.getElementById('win-modal');
+        const loseModal = document.getElementById('lose-modal');
+        const helpModal = document.getElementById('help-modal');
+        const winTime = document.getElementById('win-time');
+        const playAgainWin = document.getElementById('play-again-win');
+        const playAgainLose = document.getElementById('play-again-lose');
+        const closeHelp = document.getElementById('close-help');
+        const startTutorial = document.getElementById('start-tutorial');
+        const tutorialOverlay = document.getElementById('tutorial-overlay');
+        const difficultyBtns = document.querySelectorAll('.difficulty-btn');
+        
+        // Set up difficulty levels
+        const difficultySettings = {
+            easy: { width: 8, height: 8, leprechaunCount: 10 },
+            medium: { width: 10, height: 10, leprechaunCount: 20 },
+            hard: { width: 12, height: 12, leprechaunCount: 35 }
+        };
+        
+        // Initialize the game
+        function initGame() {
+            // Apply difficulty settings
+            const settings = difficultySettings[difficulty];
+            width = settings.width;
+            height = settings.height;
+            leprechaunCount = settings.leprechaunCount;
+            
+            // Update grid template columns
+            gameBoard.style.gridTemplateColumns = `repeat(${width}, 1fr)`;
+            
+            // Create the board
+            createBoard();
+            
+            // Update display
+            updateShamrocksDisplay();
+            
+            // Reset state
+            gameStarted = false;
+            gameOver = false;
+            revealedCount = 0;
+            
+            // Reset timer
+            clearInterval(timerInterval);
+            startTime = 0;
+            timeDisplay.textContent = '0';
+        }
+        
+        // Create the game board
+        function createBoard() {
+            // Clear the board
+            gameBoard.innerHTML = '';
+            board = [];
+            
+            // Create cells
+            for (let y = 0; y < height; y++) {
+                const row = [];
+                for (let x = 0; x < width; x++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.dataset.x = x;
+                    cell.dataset.y = y;
+                    cell.addEventListener('click', handleCellClick);
+                    gameBoard.appendChild(cell);
+                    
+                    row.push({
+                        x,
+                        y,
+                        isLeprechaun: false,
+                        isRevealed: false,
+                        isFlagged: false,
+                        neighborCount: 0,
+                        specialItem: null
+                    });
+                }
+                board.push(row);
+            }
+        }
+        
+        // Start the game with first click
+        function startGame(clickX, clickY) {
+            // Place leprechauns (avoiding the first click)
+            placeLeprechauns(clickX, clickY);
+            
+            // Calculate neighbor counts
+            calculateNeighborCounts();
+            
+            // Place special items
+            placeSpecialItems();
+            
+            // Start timer
+            startTime = Date.now();
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            gameStarted = true;
+        }
+        
+        // Place leprechauns randomly (avoiding first click and its neighbors)
+        function placeLeprechauns(safeX, safeY) {
+            let placed = 0;
+            
+            // Create a list of safe cells around first click
+            const safeCells = [];
+            for (let y = Math.max(0, safeY - 1); y <= Math.min(height - 1, safeY + 1); y++) {
+                for (let x = Math.max(0, safeX - 1); x <= Math.min(width - 1, safeX + 1); x++) {
+                    safeCells.push({ x, y });
+                }
+            }
+            
+            while (placed < leprechaunCount) {
+                const x = Math.floor(Math.random() * width);
+                const y = Math.floor(Math.random() * height);
+                
+                // Check if cell is in safe cells
+                const isSafe = safeCells.some(cell => cell.x === x && cell.y === y);
+                
+                if (!isSafe && !board[y][x].isLeprechaun) {
+                    board[y][x].isLeprechaun = true;
+                    placed++;
+                }
+            }
+        }
+        
+        // Calculate neighbor counts for each cell
+        function calculateNeighborCounts() {
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    if (!board[y][x].isLeprechaun) {
+                        let count = 0;
+                        
+                        // Check all 8 neighboring cells
+                        for (let dy = -1; dy <= 1; dy++) {
+                            for (let dx = -1; dx <= 1; dx++) {
+                                const nx = x + dx;
+                                const ny = y + dy;
+                                
+                                // Skip if outside board or same cell
+                                if (nx < 0 || nx >= width || ny < 0 || ny >= height || (dx === 0 && dy === 0)) {
+                                    continue;
+                                }
+                                
+                                if (board[ny][nx].isLeprechaun) {
+                                    count++;
+                                }
+                            }
+                        }
+                        
+                        board[y][x].neighborCount = count;
+                    }
+                }
+            }
+        }
+        
+        // Place special items on the board
+        function placeSpecialItems() {
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const cell = board[y][x];
+                    
+                    if (!cell.isLeprechaun && cell.neighborCount > 0) {
+                        // Chance to replace number with special item
+                        const randomValue = Math.random();
+                        let cumulativeChance = 0;
+                        
+                        for (const item of specialItems) {
+                            cumulativeChance += item.chance;
+                            if (randomValue < cumulativeChance) {
+                                cell.specialItem = item.emoji;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Handle cell click (works for both mouse clicks and touch events)
+        function handleCellClick(e) {
+            if (gameOver) return;
+            
+            // Get the cell coordinates regardless of event type
+            const target = e.target.closest('.cell');
+            if (!target) return;
+            
+            const x = parseInt(target.dataset.x);
+            const y = parseInt(target.dataset.y);
+            const cell = board[y][x];
+            
+            // Start game on first click
+            if (!gameStarted) {
+                startGame(x, y);
+            }
+            
+            // Flag mode
+            if (flagMode) {
+                toggleFlag(x, y);
+                return;
+            }
+            
+            // Ignore click if cell is flagged or already revealed
+            if (cell.isFlagged || cell.isRevealed) {
+                return;
+            }
+            
+            // Game over if clicked on leprechaun
+            if (cell.isLeprechaun) {
+                revealAll();
+                endGame(false);
+                return;
+            }
+            
+            // Reveal the cell
+            revealCell(x, y);
+            
+            // Check win condition
+            checkWin();
+        }
+        
+        // Reveal a cell
+        function revealCell(x, y) {
+            const cell = board[y][x];
+            
+            if (cell.isRevealed || cell.isFlagged) {
+                return;
+            }
+            
+            cell.isRevealed = true;
+            revealedCount++;
+            
+            const domCell = document.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
+            domCell.classList.add('revealed');
+            
+            // Show content
+            if (cell.isLeprechaun) {
+                domCell.textContent = 'ðŸ§™â€â™‚ï¸';
+            } else if (cell.specialItem) {
+                domCell.textContent = cell.specialItem;
+            } else if (cell.neighborCount > 0) {
+                domCell.textContent = cell.neighborCount;
+                
+                // Color numbers
+                const colors = ['blue', 'green', 'red', 'darkblue', 'darkred', 'teal', 'black', 'gray'];
+                domCell.style.color = colors[cell.neighborCount - 1];
+            } else {
+                // If empty cell, reveal neighbors (flood fill)
+                for (let dy = -1; dy <= 1; dy++) {
+                    for (let dx = -1; dx <= 1; dx++) {
+                        const nx = x + dx;
+                        const ny = y + dy;
+                        
+                        if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                            revealCell(nx, ny);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Toggle flag on a cell
+        function toggleFlag(x, y) {
+            const cell = board[y][x];
+            
+            if (cell.isRevealed) {
+                return;
+            }
+            
+            cell.isFlagged = !cell.isFlagged;
+            
+            const domCell = document.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
+            if (cell.isFlagged) {
+                domCell.classList.add('flagged');
+            } else {
+                domCell.classList.remove('flagged');
+            }
+            
+            updateShamrocksDisplay();
+        }
+        
+        // Reveal all cells
+        function revealAll() {
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    const cell = board[y][x];
+                    const domCell = document.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
+                    
+                    domCell.classList.add('revealed');
+                    
+                    if (cell.isLeprechaun) {
+                        domCell.textContent = 'ðŸ§™â€â™‚ï¸';
+                    } else if (cell.specialItem) {
+                        domCell.textContent = cell.specialItem;
+                    } else if (cell.neighborCount > 0) {
+                        domCell.textContent = cell.neighborCount;
+                        
+                        // Color numbers
+                        const colors = ['blue', 'green', 'red', 'darkblue', 'darkred', 'teal', 'black', 'gray'];
+                        domCell.style.color = colors[cell.neighborCount - 1];
+                    }
+                }
+            }
+        }
+        
+        // Check win condition
+        function checkWin() {
+            const totalCells = width * height;
+            if (revealedCount === totalCells - leprechaunCount) {
+                endGame(true);
+            }
+        }
+        
+        // End the game
+        function endGame(isWin) {
+            gameOver = true;
+            clearInterval(timerInterval);
+            
+            if (isWin) {
+                winTime.textContent = timeDisplay.textContent;
+                winModal.style.display = 'flex';
+            } else {
+                loseModal.style.display = 'flex';
+            }
+        }
+        
+        // Update timer
+        function updateTimer() {
+            const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+            timeDisplay.textContent = elapsedSeconds;
+        }
+        
+        // Update shamrocks (unflagged leprechauns) display
+        function updateShamrocksDisplay() {
+            let flagCount = 0;
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    if (board[y][x].isFlagged) {
+                        flagCount++;
+                    }
+                }
+            }
+            
+            shamrocksDisplay.textContent = leprechaunCount - flagCount;
+        }
+        
+        // Toggle flag mode
+        function toggleFlagMode() {
+            flagMode = !flagMode;
+            flagBtn.textContent = `Flag Mode: ${flagMode ? 'ON' : 'OFF'}`;
+            flagBtn.classList.toggle('flag-mode', flagMode);
+        }
+        
+        // Start tutorial
+        function showTutorial() {
+            tutorialStep = 0;
+            tutorialOverlay.style.display = 'block';
+            nextTutorialStep();
+        }
+        
+        // Show next tutorial step
+        function nextTutorialStep() {
+            // Remove previous tutorial step
+            const previousStep = document.querySelector('.tutorial-step');
+            if (previousStep) {
+                previousStep.remove();
+            }
+            
+            // Tutorial content
+            const tutorialSteps = [
+                { text: "Welcome to the tutorial! Click anywhere to continue.", position: { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' } },
+                { text: "The goal is to find all lucky charms without disturbing any leprechauns.", position: { top: '20%', left: '50%', transform: 'translate(-50%, 0)' } },
+                { text: "Click any cell to start. The first click is always safe!", target: '.game-board' },
+                { text: "Numbers show how many leprechauns are in adjacent cells.", target: '.game-board' },
+                { text: "Special Irish-themed items replace some numbers. They're all safe!", target: '.legend' },
+                { text: "Toggle Flag Mode to mark suspected leprechaun locations.", target: '#flag-btn' },
+                { text: "Use this button to start a new game anytime.", target: '#new-game-btn' },
+                { text: "You're ready to play! Click to close the tutorial.", position: { top: '50%', left: '50%', transform: 'translate(-50%, -50%)' } }
+            ];
+            
+            // End tutorial if all steps shown
+            if (tutorialStep >= tutorialSteps.length) {
+                tutorialOverlay.style.display = 'none';
+                return;
+            }
+            
+            // Create tutorial step element
+            const step = document.createElement('div');
+            step.classList.add('tutorial-step');
+            step.textContent = tutorialSteps[tutorialStep].text;
+            
+            // Position the tutorial element
+            if (tutorialSteps[tutorialStep].target) {
+                const target = document.querySelector(tutorialSteps[tutorialStep].target);
+                if (target) {
+                    const rect = target.getBoundingClientRect();
+                    step.style.top = rect.top + rect.height + 'px';
+                    step.style.left = rect.left + rect.width / 2 + 'px';
+                    step.style.transform = 'translateX(-50%)';
+                }
+            } else if (tutorialSteps[tutorialStep].position) {
+                const pos = tutorialSteps[tutorialStep].position;
+                step.style.top = pos.top;
+                step.style.left = pos.left;
+                if (pos.transform) {
+                    step.style.transform = pos.transform;
+                }
+            }
+            
+            document.body.appendChild(step);
+            tutorialStep++;
+            
+            // Click to advance
+            tutorialOverlay.onclick = nextTutorialStep;
+            step.onclick = nextTutorialStep;
+        }
+        
+        // Change difficulty
+        function changeDifficulty(e) {
+            const newDifficulty = e.target.dataset.difficulty;
+            if (newDifficulty) {
+                difficulty = newDifficulty;
+                
+                // Update active button
+                difficultyBtns.forEach(btn => {
+                    btn.classList.toggle('active-difficulty', btn.dataset.difficulty === difficulty);
+                });
+                
+                // Restart game
+                initGame();
+            }
+        }
+        
+        // Event listeners
+        newGameBtn.addEventListener('click', initGame);
+        flagBtn.addEventListener('click', toggleFlagMode);
+        helpBtn.addEventListener('click', () => helpModal.style.display = 'flex');
+        playAgainWin.addEventListener('click', () => { winModal.style.display = 'none'; initGame(); });
+        playAgainLose.addEventListener('click', () => { loseModal.style.display = 'none'; initGame(); });
+        closeHelp.addEventListener('click', () => helpModal.style.display = 'none');
+        startTutorial.addEventListener('click', () => { helpModal.style.display = 'none'; showTutorial(); });
+        difficultyBtns.forEach(btn => btn.addEventListener('click', changeDifficulty));
+        
+        // Enhanced mobile touch handling
+        // Prevent all default touch behaviors on game cells
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.classList.contains('cell')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        document.addEventListener('touchmove', function(e) {
+            if (e.target.classList.contains('cell')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
+        document.addEventListener('touchend', function(e) {
+            if (e.target.classList.contains('cell')) {
+                e.preventDefault();
+                // Simulate a click event for the touch
+                e.target.click();
+            }
+        }, { passive: false });
+        
+        // Prevent double tap zoom on the entire game board
+        gameBoard.addEventListener('touchend', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+        
+        // Initialize the game
+        initGame();
+        
+        // Show help on first load
+        helpModal.style.display = 'flex';
+    </script>
+</body>
+</html>
