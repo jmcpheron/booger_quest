@@ -20,7 +20,6 @@
             touch-action: manipulation;
             overflow: hidden;
             user-select: none;
-            padding-top: 3.5rem;
         }
         
         .container {
@@ -293,14 +292,9 @@
         
         /* Header styles */
         .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            padding: 0.5rem;
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(5px);
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 2rem;
         }
         .menu-btn {
             background: none;
@@ -316,12 +310,11 @@
         .menu-content {
             display: none;
             position: absolute;
-            top: 100%;
-            left: 0;
             background-color: white;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             border-radius: 0 0 5px 5px;
             padding: 0.5rem;
+            z-index: 100;
         }
         .menu-content.show {
             display: block;
@@ -339,13 +332,15 @@
     </style>
 </head>
 <body>
-    <header class="header">
-        <button class="menu-btn" id="menuBtn">☰</button>
-        <div class="menu-content" id="menuContent">
-            <a href="/">🏠 Home</a>
-            <a href="st-brigid.html">🍀 St. Brigid's Game</a>
+    <div class="header">
+        <div class="container">
+            <button class="menu-btn" id="menuBtn">☰</button>
+            <div class="menu-content" id="menuContent">
+                <a href="/">🏠 Home</a>
+                <a href="st-brigid.html">🍀 St. Brigid's Game</a>
+            </div>
         </div>
-    </header>
+    </div>
     <div class="container">
         <h1>Brigid's Treasure Hunt</h1>
         <h2>Match the Irish treasures!</h2>
